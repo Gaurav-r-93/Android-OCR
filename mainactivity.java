@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
     Uri image_uri;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ActionBar actionBar = getSupportActionBar();
@@ -64,7 +65,9 @@ public class MainActivity extends AppCompatActivity {
         mResultEt   = findViewById(R.id.resultEt);
         mPreviewIv  = findViewById(R.id.imageIv);
         button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener () {
+        
+        button.setOnClickListener(new View.OnClickListener ()
+        {
             @Override
             public void onClick(View view) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -76,21 +79,24 @@ public class MainActivity extends AppCompatActivity {
 
 
         //camera permission
-        cameraPermission = new String[] {Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        cameraPermission = new String[] {Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        
         //storage permission
         storagePermission = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) 
+    {
+        switch (item.getItemId())
+        {
 
             case R.id.addImage:
                 showImageImportDialog();
@@ -103,11 +109,13 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void dialogAbout() {
+    private void dialogAbout() 
+    {
         new AlertDialog.Builder(this)
                 .setTitle("About App")
                 .setMessage("This app is made by G V Monish & Gaurav R")
-                .setPositiveButton("CLOSE", new DialogInterface.OnClickListener() {
+                .setPositiveButton("CLOSE", new DialogInterface.OnClickListener() 
+                {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -116,29 +124,39 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void showImageImportDialog() {
+    private void showImageImportDialog() 
+    {
         String[] items = {"Camera", "Gallery"};
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
         dialog.setTitle("Select Image");
-        dialog.setItems(items, new DialogInterface.OnClickListener() {
+        dialog.setItems(items, new DialogInterface.OnClickListener() 
+        {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                    if (!checkCameraPermission()) {
+            public void onClick(DialogInterface dialog, int which) 
+            {
+                if (which == 0) 
+                {
+                    if (!checkCameraPermission()) 
+                    {
                         //camera permission not allowed, request it
                         requestCameraPermission();
-                    } else {
+                    } else 
+                    {
                         //permission allowed, take picture
                         pickCamera();
                     }
                 }
 
-                if (which == 1) {
-                    if (!checkStoragePermission()) {
+                if (which == 1) 
+                {
+                    if (!checkStoragePermission()) 
+                    {
                         //storage permission not allowed, request it
                         requestStoragePermission();
-                    } else {
+                    }
+                    else 
+                    {
                         //permission allowed, take picture
                         pickGallery();
                     }
@@ -148,7 +166,8 @@ public class MainActivity extends AppCompatActivity {
         dialog.create().show();
     }
 
-    private void pickGallery() {
+    private void pickGallery() 
+    {
         //intent to pick image from gallery
         Intent intent = new Intent(Intent.ACTION_PICK);
         //set intent type to image
@@ -156,7 +175,8 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
     }
 
-    private void pickCamera() {
+    private void pickCamera()
+    {
         //intent to take image from camera, it will also be save to storage to get high quality image
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "NewPick"); //title of the picture
@@ -168,21 +188,25 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(cameraIntent, IMAGE_PICK_CAMERA_CODE);
     }
 
-    private void requestStoragePermission() {
+    private void requestStoragePermission() 
+    {
         ActivityCompat.requestPermissions(this, storagePermission, STORAGE_REQUEST_CODE);
     }
 
-    private boolean checkStoragePermission() {
+    private boolean checkStoragePermission() 
+    {
         boolean result = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
         return result;
     }
 
-    private void requestCameraPermission() {
+    private void requestCameraPermission()
+    {
         ActivityCompat.requestPermissions(this, cameraPermission, CAMERA_REQUEST_CODE);
     }
 
-    private boolean checkCameraPermission() {
+    private boolean checkCameraPermission() 
+    {
         boolean result = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
 
@@ -193,32 +217,41 @@ public class MainActivity extends AppCompatActivity {
 
     //handle permission result
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) 
+    {
         switch (requestCode){
             case CAMERA_REQUEST_CODE:
-                if (grantResults.length > 0) {
+                if (grantResults.length > 0) 
+                {
                     boolean cameraAccepted = grantResults[0] ==
                             PackageManager.PERMISSION_GRANTED;
                     boolean writeStorageAccepted = grantResults[0] ==
                             PackageManager.PERMISSION_GRANTED;
 
 
-                    if (cameraAccepted && writeStorageAccepted) {
+                    if (cameraAccepted && writeStorageAccepted) 
+                    {
                         pickCamera();
-                    } else {
+                    } 
+                    else 
+                    {
                         Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
                     }
                 }
             break;
 
             case STORAGE_REQUEST_CODE:
-                if (grantResults.length > 0) {
+                if (grantResults.length > 0)
+                {
                     boolean writeStorageAccepted = grantResults[0] ==
                             PackageManager.PERMISSION_GRANTED;
 
-                    if (writeStorageAccepted) {
+                    if (writeStorageAccepted) 
+                    {
                         pickGallery();
-                    } else {
+                    }
+                    else 
+                    {
                         Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -228,17 +261,21 @@ public class MainActivity extends AppCompatActivity {
 
     //handle image result
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == IMAGE_PICK_GALLERY_CODE) {
+        if (resultCode == RESULT_OK) 
+        {
+            if (requestCode == IMAGE_PICK_GALLERY_CODE) 
+            {
                 //got image from gallery now crop it
                 CropImage.activity(data.getData())
                         .setGuidelines(CropImageView.Guidelines.ON) //enable image guid lines
                         .start(this);
             }
 
-            if (requestCode == IMAGE_PICK_CAMERA_CODE) {
+            if (requestCode == IMAGE_PICK_CAMERA_CODE) 
+            {
                 //got image from camera now crop it
                 CropImage.activity(image_uri)
                         .setGuidelines(CropImageView.Guidelines.ON) //enable image guid lines
@@ -247,7 +284,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //get cropped image
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
+        {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri(); //get image uri
@@ -260,9 +298,12 @@ public class MainActivity extends AppCompatActivity {
 
                 TextRecognizer recognizer = new TextRecognizer.Builder(getApplicationContext()).build();
 
-                if (!recognizer.isOperational()) {
+                if (!recognizer.isOperational()) 
+                {
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-                } else {
+                } 
+                else 
+                {
                     Frame frame = new Frame.Builder().setBitmap(bitmap).build();
                     SparseArray<TextBlock> items = recognizer.detect(frame);
                     StringBuilder sb = new StringBuilder();
@@ -276,7 +317,9 @@ public class MainActivity extends AppCompatActivity {
                     //set text to edit text
                     mResultEt.setText(sb.toString());
                 }
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+            } 
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) 
+            {
                 //if there is any error show it
                 Exception error = result.getError();
                 Toast.makeText(this, "" + error, Toast.LENGTH_SHORT).show();
